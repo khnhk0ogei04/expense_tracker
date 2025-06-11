@@ -9,6 +9,6 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser); 
 router.get("/getUser", protect,  getUserInfo);
-router.post("/upload-image", protect, upload.single("image"), updateProfileImage);
+router.post("/upload-image", upload.single("image"), updateProfileImage);
 
 module.exports = router;
