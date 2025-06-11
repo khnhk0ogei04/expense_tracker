@@ -83,46 +83,66 @@ exports.getUserInfo = async (req, res) => {
     }
 }
 
-exports.updateProfileImage = async (req, res) => {
-    try {
-        const userId = req.user.id;
+// exports.updateProfileImage = async (req, res) => {
+//     try {
+//         const userId = req.user.id;
         
+//         // Check if file is uploaded
+//         if (!req.file) {
+//             return res.status(400).json({ message: "No image file provided" });
+//         }
+        
+//         // Get user to check if they have an existing profile image
+//         const user = await User.findById(userId);
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+        
+//         // Delete old profile image from Cloudinary if exists
+//         if (user.profileImageUrl) {
+//             // Extract public_id from Cloudinary URL
+//             const urlParts = user.profileImageUrl.split('/');
+//             const publicIdWithExt = urlParts[urlParts.length - 1];
+//             const publicId = `expense-tracker/${publicIdWithExt.split('.')[0]}`;
+            
+//             try {
+//                 await cloudinary.uploader.destroy(publicId);
+//             } catch (err) {
+//                 console.error('Error deleting old profile image:', err);
+//             }
+//         }
+        
+//         // Update user with new profile image URL
+//         user.profileImageUrl = req.file.path;
+//         await user.save();
+        
+//         res.status(200).json({
+//             message: "Profile image updated successfully",
+//             profileImageUrl: user.profileImageUrl
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             message: "Error updating profile image",
+//             error: error.message
+//         });
+//     }
+// }
+
+exports.uploadImageForRegister = async (req, res) => {
+    try {
         // Check if file is uploaded
         if (!req.file) {
             return res.status(400).json({ message: "No image file provided" });
         }
         
-        // Get user to check if they have an existing profile image
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        
-        // Delete old profile image from Cloudinary if exists
-        if (user.profileImageUrl) {
-            // Extract public_id from Cloudinary URL
-            const urlParts = user.profileImageUrl.split('/');
-            const publicIdWithExt = urlParts[urlParts.length - 1];
-            const publicId = `expense-tracker/${publicIdWithExt.split('.')[0]}`;
-            
-            try {
-                await cloudinary.uploader.destroy(publicId);
-            } catch (err) {
-                console.error('Error deleting old profile image:', err);
-            }
-        }
-        
-        // Update user with new profile image URL
-        user.profileImageUrl = req.file.path;
-        await user.save();
-        
+        // Simply return the uploaded image URL from Cloudinary
         res.status(200).json({
-            message: "Profile image updated successfully",
-            profileImageUrl: user.profileImageUrl
+            message: "Image uploaded successfully",
+            imageUrl: req.file.path
         });
     } catch (error) {
         res.status(500).json({
-            message: "Error updating profile image",
+            message: "Error uploading image",
             error: error.message
         });
     }
